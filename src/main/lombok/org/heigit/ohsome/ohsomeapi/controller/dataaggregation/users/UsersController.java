@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.heigit.ohsome.ohsomeapi.controller.DefaultSwaggerParameters;
 import org.heigit.ohsome.ohsomeapi.controller.ParameterDescriptions;
-import org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor;
-import org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor;
 import org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse;
 import org.heigit.ohsome.ohsomeapi.output.Response;
 import org.heigit.ohsome.ohsomeapi.output.groupby.GroupByResponse;
@@ -31,7 +31,7 @@ public class UsersController {
    * @return {@link org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse
    *         DefaultAggregationResponse}
    * @throws Exception thrown by {@link
-   *         org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor#count(boolean) count}
+   *         org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor#count(boolean) count}
    */
   @ApiOperation(value = "Count of OSM users", nickname = "count",
       response = DefaultAggregationResponse.class)
@@ -39,8 +39,8 @@ public class UsersController {
       produces = {"application/json", "text/csv"})
   public Response count(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
       throws Exception {
-    ContributionsExecutor executor =
-        new ContributionsExecutor(servletRequest, servletResponse, false);
+    ContributionsCountExecutor executor =
+        new ContributionsCountExecutor(servletRequest, servletResponse, false);
     return executor.count(true);
   }
 
@@ -50,7 +50,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByType(HttpServletRequest, HttpServletResponse, boolean) countGroupByType}
    */
   @ApiOperation(value = "Count of OSM users grouped by the type", nickname = "countGroupByType",
@@ -68,7 +68,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByTag(HttpServletRequest, HttpServletResponse, boolean) countGroupByTag}
    */
   @ApiOperation(value = "Count of OSM users grouped by the tag", nickname = "countGroupByTag",
@@ -92,7 +92,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByKey(HttpServletRequest, HttpServletResponse, boolean) countGroupByKey}
    */
   @ApiOperation(value = "Count of OSM users grouped by the key", nickname = "countGroupByKey",
@@ -113,7 +113,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByBoundary(HttpServletRequest, HttpServletResponse, boolean)
    *         countGroupByBoundary}
    */
@@ -135,7 +135,7 @@ public class UsersController {
    * @return {@link org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse
    *         DefaultAggregationResponse}
    * @throws Exception thrown by {@link
-   *         org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor#count(boolean) count}
+   *         org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor#count(boolean) count}
    */
   @ApiOperation(
       value = "Density of OSM users (number of users divided "
@@ -145,8 +145,8 @@ public class UsersController {
       produces = {"application/json", "text/csv"})
   public Response countDensity(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    ContributionsExecutor executor =
-        new ContributionsExecutor(servletRequest, servletResponse, true);
+    ContributionsCountExecutor executor =
+        new ContributionsCountExecutor(servletRequest, servletResponse, true);
     return executor.count(true);
   }
 
@@ -156,7 +156,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByType(HttpServletRequest, HttpServletResponse, boolean) countGroupByType}
    */
   @ApiOperation(value = "Density of OSM users grouped by the type",
@@ -174,7 +174,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByTag(HttpServletRequest, HttpServletResponse, boolean) countGroupByTag}
    */
   @ApiOperation(value = "Density of OSM users grouped by the tag",
@@ -199,7 +199,7 @@ public class UsersController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.UsersRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.UsersRequestExecutor
    *         #countGroupByBoundary(HttpServletRequest, HttpServletResponse, boolean)
    *         countGroupByBoundary}
    */

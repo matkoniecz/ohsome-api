@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor;
 import org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse;
 import org.heigit.ohsome.ohsomeapi.output.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class ContributionsCountController {
    * @return {@link org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse
    *         DefaultAggregationResponse}
    * @throws Exception thrown by
-   *         {@link org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor#count(boolean) count}
+   *         {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor#count(boolean) count}
    */
   @ApiOperation(value = "Count of OSM contributions", nickname = "contributionsCount",
       response = DefaultAggregationResponse.class)
@@ -36,8 +36,8 @@ public class ContributionsCountController {
       produces = {"application/json", "text/csv"})
   public Response contributionsCount(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    ContributionsExecutor executor =
-        new ContributionsExecutor(servletRequest, servletResponse, false);
+    ContributionsCountExecutor executor =
+        new ContributionsCountExecutor(servletRequest, servletResponse, false);
     return executor.count(false);
   }
 
@@ -49,7 +49,7 @@ public class ContributionsCountController {
    * @return {@link org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse
    *         DefaultAggregationResponse}
    * @throws Exception thrown by
-   *         {@link org.heigit.ohsome.ohsomeapi.executor.ContributionsExecutor#count(boolean) count}
+   *         {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ContributionsCountExecutor#count(boolean) count}
    */
   @ApiOperation(
       value = "Density of OSM contributions (number of contributions divided by the "
@@ -59,8 +59,8 @@ public class ContributionsCountController {
       produces = {"application/json", "text/csv"})
   public Response contributionsCountDensity(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    ContributionsExecutor executor =
-        new ContributionsExecutor(servletRequest, servletResponse, true);
+    ContributionsCountExecutor executor =
+        new ContributionsCountExecutor(servletRequest, servletResponse, true);
     return executor.count(false);
   }
 

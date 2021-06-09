@@ -1,4 +1,4 @@
-package org.heigit.ohsome.ohsomeapi.executor;
+package org.heigit.ohsome.ohsomeapi.executor.dataextraction;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -14,7 +14,8 @@ import org.heigit.bigspatialdata.oshdb.osm.OSMEntity;
 import org.heigit.bigspatialdata.oshdb.util.celliterator.ContributionType;
 import org.heigit.bigspatialdata.oshdb.util.time.TimestampFormatter;
 import org.heigit.ohsome.filter.FilterExpression;
-import org.heigit.ohsome.ohsomeapi.controller.dataextraction.elements.ElementsGeometry;
+import org.heigit.ohsome.ohsomeapi.controller.dataextraction.ElementsGeometry;
+import org.heigit.ohsome.ohsomeapi.executor.ExecutionUtils;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.InputProcessingUtils;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.SimpleFeatureType;
 import org.locationtech.jts.geom.Geometry;
@@ -23,7 +24,7 @@ import org.wololo.geojson.Feature;
 /**
  * Used by data extraction requests to create GeoJSON features from OSM entities.
  */
-public class DataExtractionTransformer implements Serializable {
+public class ExtractionTransformer implements Serializable {
   private static final String VALID_TO_PROPERTY = "@validTo";
   private static final String VALID_FROM_PROPERTY = "@validFrom";
   private static final String TIMESTAMP_PROPERTY = "@timestamp";
@@ -75,7 +76,7 @@ public class DataExtractionTransformer implements Serializable {
    *        simple feature "geometry" types, specify the set of to be returned geometry types here
    * @param isContainingSimpleFeatureTypes set true if the query uses the (deprecated) types
    */
-  public DataExtractionTransformer(String startTimestamp, String endTimestamp,
+  public ExtractionTransformer(String startTimestamp, String endTimestamp,
       FilterExpression filter, boolean isContributionsEndpoint,
       boolean isContributionsLatestEndpoint, boolean clipGeometries, boolean includeTags,
       boolean includeOSMMetadata, boolean includeContributionTypes, InputProcessingUtils inputUtils,
@@ -126,6 +127,8 @@ public class DataExtractionTransformer implements Serializable {
         skipNext = true;
       } else {
         // if not "creation": take "before" as starting "row" (geom, tags), valid_from = t_start
+        System.out.println("Contribution changeset " + firstContribution.getChangesetId());    
+        System.out.println("After: " + firstContribution.getEntityAfter().getChangesetId());
         currentEntity = firstContribution.getEntityBefore();
         currentGeom = ExecutionUtils.getGeometry(firstContribution, clipGeometries, true);
         validFrom = startTimestamp;
@@ -138,6 +141,9 @@ public class DataExtractionTransformer implements Serializable {
         }
         OSMContribution contribution = contributions.get(i);
         if (isContributionsEndpoint) {
+          System.out.println("Contribution changeset " + contribution.getChangesetId());
+          System.out.println("Before " + contribution.getEntityBefore().getChangesetId());      
+          System.out.println("After: " + contribution.getEntityAfter().getChangesetId());
           currentEntity = contribution.getEntityAfter();
           currentGeom = ExecutionUtils.getGeometry(contribution, clipGeometries, false);
           validFrom = TimestampFormatter.getInstance().isoDateTime(contribution.getTimestamp());
@@ -165,15 +171,30 @@ public class DataExtractionTransformer implements Serializable {
           skipNext = true;
         } else if (!isContributionsEndpoint) {
           // else: take "after" as next row
+          System.out.println("Contribution changeset " + contribution.getChangesetId());
+          System.out.println("Before " + contribution.getEntityBefore().getChangesetId());      
+          System.out.println("After: " + contribution.getEntityAfter().getChangesetId());
           currentEntity = contribution.getEntityAfter();
           currentGeom = ExecutionUtils.getGeometry(contribution, clipGeometries, false);
           validFrom = TimestampFormatter.getInstance().isoDateTime(contribution.getTimestamp());
         }
       }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // after loop:
     OSMContribution lastContribution = contributions.get(contributions.size() - 1);
     currentGeom = ExecutionUtils.getGeometry(lastContribution, clipGeometries, false);
+    System.out.println("Contribution changeset " + lastContribution.getChangesetId());
+    System.out.println("Before " + lastContribution.getEntityBefore().getChangesetId());      
+    System.out.println("After: " + lastContribution.getEntityAfter().getChangesetId());
     currentEntity = lastContribution.getEntityAfter();
     if (!lastContribution.is(ContributionType.DELETION)) {
       // if last contribution was not "deletion": set valid_to = t_end

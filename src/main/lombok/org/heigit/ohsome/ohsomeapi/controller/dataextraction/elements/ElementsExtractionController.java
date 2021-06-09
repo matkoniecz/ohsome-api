@@ -4,8 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor;
+import org.heigit.ohsome.ohsomeapi.controller.dataextraction.ElementsGeometry;
 import org.heigit.ohsome.ohsomeapi.executor.RequestResource;
+import org.heigit.ohsome.ohsomeapi.executor.dataextraction.ExtractionExecutor;
 import org.heigit.ohsome.ohsomeapi.output.ExtractionResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Elements Extraction")
 @RestController
 @RequestMapping("/elements")
-public class ElementsController {
+public class ElementsExtractionController {
 
   /**
    * Gives the OSM objects as GeoJSON features, which have the geometry of the respective objects in
@@ -26,7 +27,7 @@ public class ElementsController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #extract(RequestResource, ElementsGeometry, HttpServletRequest, HttpServletResponse)
    *         extract}
    */
@@ -36,7 +37,7 @@ public class ElementsController {
       produces = "application/json")
   public void elementsGeometry(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    ElementsRequestExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.RAW,
+    ExtractionExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.RAW,
         servletRequest, servletResponse);
   }
 
@@ -46,7 +47,7 @@ public class ElementsController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #extract(RequestResource, ElementsGeometry, HttpServletRequest, HttpServletResponse)
    *         extract}
    */
@@ -56,7 +57,7 @@ public class ElementsController {
       produces = "application/json")
   public void elementsBbox(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
       throws Exception {
-    ElementsRequestExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.BBOX,
+    ExtractionExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.BBOX,
         servletRequest, servletResponse);
   }
 
@@ -66,7 +67,7 @@ public class ElementsController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #extract(RequestResource, ElementsGeometry, HttpServletRequest, HttpServletResponse)
    *         extract}
    */
@@ -76,7 +77,7 @@ public class ElementsController {
       produces = "application/json")
   public void elementsCentroid(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    ElementsRequestExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.CENTROID,
+    ExtractionExecutor.extract(RequestResource.DATAEXTRACTION, ElementsGeometry.CENTROID,
         servletRequest, servletResponse);
   }
 }

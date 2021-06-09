@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.heigit.ohsome.ohsomeapi.executor.MetadataRequestExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.metadata.MetadataRequestExecutor;
 
 public class ResourceParameters {
   private ResourceParameters() {

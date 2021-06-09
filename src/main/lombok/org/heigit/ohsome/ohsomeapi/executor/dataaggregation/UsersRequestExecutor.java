@@ -1,4 +1,4 @@
-package org.heigit.ohsome.ohsomeapi.executor;
+package org.heigit.ohsome.ohsomeapi.executor.dataaggregation;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -27,6 +27,8 @@ import org.heigit.ohsome.filter.FilterExpression;
 import org.heigit.ohsome.ohsomeapi.Application;
 import org.heigit.ohsome.ohsomeapi.exception.BadRequestException;
 import org.heigit.ohsome.ohsomeapi.exception.ExceptionMessages;
+import org.heigit.ohsome.ohsomeapi.executor.ExecutionUtils;
+import org.heigit.ohsome.ohsomeapi.executor.RequestParameters;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.InputProcessingUtils;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.InputProcessor;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.ProcessingData;

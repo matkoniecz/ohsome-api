@@ -1,4 +1,4 @@
-package org.heigit.ohsome.ohsomeapi.executor;
+package org.heigit.ohsome.ohsomeapi.executor.metadata;
 
 import javax.servlet.http.HttpServletRequest;
 import org.heigit.ohsome.ohsomeapi.Application;

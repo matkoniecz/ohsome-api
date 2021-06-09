@@ -1,4 +1,4 @@
-package org.heigit.ohsome.ohsomeapi.executor;
+package org.heigit.ohsome.ohsomeapi.executor.dataaggregation;
 
 import java.util.SortedMap;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +7,9 @@ import org.heigit.bigspatialdata.oshdb.api.mapreducer.MapReducer;
 import org.heigit.bigspatialdata.oshdb.api.object.OSMContribution;
 import org.heigit.bigspatialdata.oshdb.util.OSHDBTimestamp;
 import org.heigit.ohsome.ohsomeapi.Application;
+import org.heigit.ohsome.ohsomeapi.executor.ExecutionUtils;
+import org.heigit.ohsome.ohsomeapi.executor.RequestExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.RequestParameters;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.InputProcessor;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.ProcessingData;
 import org.heigit.ohsome.ohsomeapi.output.Attribution;
@@ -18,13 +21,13 @@ import org.heigit.ohsome.ohsomeapi.output.contributions.ContributionsResult;
 import org.locationtech.jts.geom.Geometry;
 
 /** Includes the execute method for requests mapped to /contributions/couht and /users/count. */
-public class ContributionsExecutor extends RequestExecutor {
+public class ContributionsCountExecutor extends RequestExecutor {
 
   private final InputProcessor inputProcessor;
   private final ProcessingData processingData;
   private final long startTime = System.currentTimeMillis();
 
-  public ContributionsExecutor(HttpServletRequest servletRequest,
+  public ContributionsCountExecutor(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse, boolean isDensity) {
     super(servletRequest, servletResponse);
     inputProcessor = new InputProcessor(servletRequest, false, isDensity);

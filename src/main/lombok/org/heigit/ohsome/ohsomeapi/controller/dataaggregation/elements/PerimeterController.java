@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.heigit.ohsome.ohsomeapi.controller.DefaultSwaggerParameters;
 import org.heigit.ohsome.ohsomeapi.controller.ParameterDescriptions;
-import org.heigit.ohsome.ohsomeapi.executor.AggregateRequestExecutor;
-import org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor;
 import org.heigit.ohsome.ohsomeapi.executor.RequestResource;
+import org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor;
 import org.heigit.ohsome.ohsomeapi.output.DefaultAggregationResponse;
 import org.heigit.ohsome.ohsomeapi.output.Response;
 import org.heigit.ohsome.ohsomeapi.output.groupby.GroupByResponse;
@@ -44,7 +43,7 @@ public class PerimeterController {
       produces = {"application/json", "text/csv"})
   public Response perimeter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
       throws Exception {
-    AggregateRequestExecutor executor = new AggregateRequestExecutor(RequestResource.PERIMETER,
+    ElementsRequestExecutor executor = new ElementsRequestExecutor(RequestResource.PERIMETER,
         servletRequest, servletResponse, false);
     return executor.aggregate();
   }
@@ -55,7 +54,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByType(RequestResource, HttpServletRequest, HttpServletResponse,
    *         boolean, boolean) aggregateGroupByType}
    */
@@ -91,7 +90,7 @@ public class PerimeterController {
       produces = {"application/json", "text/csv"})
   public Response perimeterGroupByBoundary(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    AggregateRequestExecutor executor = new AggregateRequestExecutor(RequestResource.PERIMETER,
+    ElementsRequestExecutor executor = new ElementsRequestExecutor(RequestResource.PERIMETER,
         servletRequest, servletResponse, false);
     return executor.aggregateGroupByBoundary();
   }
@@ -102,7 +101,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByBoundaryGroupByTag(RequestResource, HttpServletRequest,
    *         HttpServletResponse, boolean, boolean) aggregateGroupByBoundaryGroupByTag}
    */
@@ -128,7 +127,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByKey(RequestResource, HttpServletRequest, HttpServletResponse,
    *         boolean, boolean) aggregateGroupByKey}
    */
@@ -151,7 +150,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByTag(RequestResource, HttpServletRequest, HttpServletResponse,
    *         boolean, boolean) aggregateGroupByTag}
    */
@@ -189,7 +188,7 @@ public class PerimeterController {
       produces = {"application/json", "text/csv"})
   public Response perimeterDensity(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    AggregateRequestExecutor executor = new AggregateRequestExecutor(RequestResource.PERIMETER,
+    ElementsRequestExecutor executor = new ElementsRequestExecutor(RequestResource.PERIMETER,
         servletRequest, servletResponse, true);
     return executor.aggregate();
   }
@@ -200,7 +199,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByType(RequestResource, HttpServletRequest, HttpServletResponse,
    *         boolean, boolean) aggregateGroupByType}
    */
@@ -235,7 +234,7 @@ public class PerimeterController {
       method = {RequestMethod.GET, RequestMethod.POST}, produces = {"application/json", "text/csv"})
   public Response perimeterDensityGroupByBoundary(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    AggregateRequestExecutor executor = new AggregateRequestExecutor(RequestResource.PERIMETER,
+    ElementsRequestExecutor executor = new ElementsRequestExecutor(RequestResource.PERIMETER,
         servletRequest, servletResponse, true);
     return executor.aggregateGroupByBoundary();
   }
@@ -246,7 +245,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByBoundaryGroupByTag(RequestResource, HttpServletRequest,
    *         HttpServletResponse, boolean, boolean) aggregateGroupByBoundaryGroupByTag}
    */
@@ -272,7 +271,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateGroupByTag(RequestResource, HttpServletRequest, HttpServletResponse, boolean,
    *         boolean) aggregateGroupByTag}
    */
@@ -298,7 +297,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateRatio(RequestResource, HttpServletRequest, HttpServletResponse)
    *         aggregateRatio}
    */
@@ -332,7 +331,7 @@ public class PerimeterController {
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
    * @return {@link org.heigit.ohsome.ohsomeapi.output.Response Response}
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.ElementsRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor
    *         #aggregateRatioGroupByBoundary(RequestResource, HttpServletRequest,
    *         HttpServletResponse) aggregateRatioGroupByBoundary}
    */

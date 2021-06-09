@@ -61,9 +61,10 @@ import org.heigit.bigspatialdata.oshdb.util.tagtranslator.OSMTag;
 import org.heigit.bigspatialdata.oshdb.util.tagtranslator.TagTranslator;
 import org.heigit.bigspatialdata.oshdb.util.time.TimestampFormatter;
 import org.heigit.ohsome.ohsomeapi.Application;
-import org.heigit.ohsome.ohsomeapi.controller.dataextraction.elements.ElementsGeometry;
+import org.heigit.ohsome.ohsomeapi.controller.dataextraction.ElementsGeometry;
 import org.heigit.ohsome.ohsomeapi.exception.DatabaseAccessException;
 import org.heigit.ohsome.ohsomeapi.exception.ExceptionMessages;
+import org.heigit.ohsome.ohsomeapi.executor.dataaggregation.ElementsRequestExecutor;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.InputProcessor;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.ProcessingData;
 import org.heigit.ohsome.ohsomeapi.inputprocessing.SimpleFeatureType;
@@ -980,7 +981,7 @@ public class ExecutionUtils implements Serializable {
     return gpr;
   }
 
-  static Set<Integer> keysToKeysInt(String[] keys, TagTranslator tt) {
+  public static Set<Integer> keysToKeysInt(String[] keys, TagTranslator tt) {
     final Set<Integer> keysInt;
     if (keys.length != 0) {
       keysInt = new HashSet<>(keys.length);

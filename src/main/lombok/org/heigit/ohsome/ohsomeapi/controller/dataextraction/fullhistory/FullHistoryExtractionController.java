@@ -1,12 +1,13 @@
-package org.heigit.ohsome.ohsomeapi.controller.dataextraction.elements;
+package org.heigit.ohsome.ohsomeapi.controller.dataextraction.fullhistory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.heigit.ohsome.ohsomeapi.executor.DataRequestExecutor;
+import org.heigit.ohsome.ohsomeapi.controller.dataextraction.ElementsGeometry;
 import org.heigit.ohsome.ohsomeapi.executor.RequestResource;
+import org.heigit.ohsome.ohsomeapi.executor.dataextraction.ExtractionExecutor;
 import org.heigit.ohsome.ohsomeapi.output.ExtractionResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Full History Elements Extraction")
 @RestController
 @RequestMapping("/elementsFullHistory")
-public class ElementsFullHistoryController {
+public class FullHistoryExtractionController {
 
   /**
    * Gives the OSM objects as GeoJSON features, which have the geometry of the respective objects in
@@ -27,7 +28,7 @@ public class ElementsFullHistoryController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.DataRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataextraction.ExtractionExecutor
    *         #extract() extract}
    */
   @ApiOperation(
@@ -41,7 +42,7 @@ public class ElementsFullHistoryController {
       produces = "application/json")
   public void elementsFullHistory(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    DataRequestExecutor executor = new DataRequestExecutor(RequestResource.DATAEXTRACTION,
+    ExtractionExecutor executor = new ExtractionExecutor(RequestResource.DATAEXTRACTION,
         ElementsGeometry.RAW, servletRequest, servletResponse);
     executor.extract();
   }
@@ -52,7 +53,7 @@ public class ElementsFullHistoryController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.DataRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataextraction.ExtractionExecutor
    *         #extract() extract}
    */
   @ApiOperation(
@@ -66,7 +67,7 @@ public class ElementsFullHistoryController {
       produces = "application/json")
   public void elementsBboxFullHistory(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    DataRequestExecutor executor = new DataRequestExecutor(RequestResource.DATAEXTRACTION,
+    ExtractionExecutor executor = new ExtractionExecutor(RequestResource.DATAEXTRACTION,
         ElementsGeometry.BBOX, servletRequest, servletResponse);
     executor.extract();
   }
@@ -77,7 +78,7 @@ public class ElementsFullHistoryController {
    *
    * @param servletRequest <code>HttpServletRequest</code> of the incoming request
    * @param servletResponse <code>HttpServletResponse</code> of the outgoing response
-   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.DataRequestExecutor
+   * @throws Exception thrown by {@link org.heigit.ohsome.ohsomeapi.executor.dataextraction.ExtractionExecutor
    *         #extract() extract}
    */
   @ApiOperation(value = "Full history OSM data having the centroid of each OSM object as geometry",
@@ -90,7 +91,7 @@ public class ElementsFullHistoryController {
       produces = "application/json")
   public void elementsCentroidFullHistory(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws Exception {
-    DataRequestExecutor executor = new DataRequestExecutor(RequestResource.DATAEXTRACTION,
+    ExtractionExecutor executor = new ExtractionExecutor(RequestResource.DATAEXTRACTION,
         ElementsGeometry.CENTROID, servletRequest, servletResponse);
     executor.extract();
   }

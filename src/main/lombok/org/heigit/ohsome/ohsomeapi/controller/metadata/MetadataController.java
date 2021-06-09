@@ -3,7 +3,7 @@ package org.heigit.ohsome.ohsomeapi.controller.metadata;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
-import org.heigit.ohsome.ohsomeapi.executor.MetadataRequestExecutor;
+import org.heigit.ohsome.ohsomeapi.executor.metadata.MetadataRequestExecutor;
 import org.heigit.ohsome.ohsomeapi.output.metadata.MetadataResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
