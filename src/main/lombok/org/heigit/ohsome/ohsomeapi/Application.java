@@ -3,7 +3,6 @@ package org.heigit.ohsome.ohsomeapi;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.io.IOException;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import org.heigit.bigspatialdata.oshdb.api.db.OSHDBH2;
@@ -118,17 +117,6 @@ public class Application implements ApplicationRunner {
           jdbcParam = args.getOptionValues(paramName).get(0).split(";");
           DbConnData.keytables =
               new OSHDBJdbc(jdbcParam[0], jdbcParam[1], jdbcParam[2], jdbcParam[3]);
-          DbConnData.mapTagTranslator = new RemoteTagTranslator(() -> {
-            try {
-              Class.forName(jdbcParam[0]);
-              return new TagTranslator(
-                  DriverManager.getConnection(jdbcParam[1], jdbcParam[2], jdbcParam[3]));
-            } catch (ClassNotFoundException e) {
-              throw new RuntimeException("A class with this specific name could not be found");
-            } catch (OSHDBKeytablesNotFoundException | SQLException e) {
-              throw new DatabaseAccessException(ExceptionMessages.DATABASE_ACCESS);
-            }
-          });
           HikariConfig hikariConfig = new HikariConfig();
           hikariConfig.setJdbcUrl(jdbcParam[1]);
           hikariConfig.setUsername(jdbcParam[2]);
@@ -137,6 +125,16 @@ public class Application implements ApplicationRunner {
           hikariConfig.setKeepaliveTime(120000);
           hikariConfig.setInitializationFailTimeout(-1);
           DbConnData.dataSource = new HikariDataSource(hikariConfig);
+          DbConnData.mapTagTranslator = new RemoteTagTranslator(() -> {
+            try {
+              Class.forName(jdbcParam[0]);
+              return new TagTranslator(DbConnData.getKeytablesConn());
+            } catch (ClassNotFoundException e) {
+              throw new RuntimeException("A class with this specific name could not be found");
+            } catch (OSHDBKeytablesNotFoundException | SQLException e) {
+              throw new DatabaseAccessException(ExceptionMessages.DATABASE_ACCESS);
+            }
+          });
           break;
         case "database.multithreading":
           if (args.getOptionValues(paramName).get(0).equalsIgnoreCase("false")) {
