@@ -133,6 +133,8 @@ public class Application implements ApplicationRunner {
           hikariConfig.setUsername(jdbcParam[2]);
           hikariConfig.setPassword(jdbcParam[3]);
           hikariConfig.setMaximumPoolSize(numberOfDataExtractionThreads);
+          hikariConfig.setKeepaliveTime(120000);
+          hikariConfig.setInitializationFailTimeout(-1);
           DbConnData.keytablesDbPoolConfig = hikariConfig;
           break;
         case "database.multithreading":
