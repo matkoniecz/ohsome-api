@@ -1,6 +1,7 @@
 package org.heigit.ohsome.ohsomeapi;
 
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -136,6 +137,7 @@ public class Application implements ApplicationRunner {
           hikariConfig.setKeepaliveTime(120000);
           hikariConfig.setInitializationFailTimeout(-1);
           DbConnData.keytablesDbPoolConfig = hikariConfig;
+          DbConnData.dataSource = new HikariDataSource(hikariConfig);
           break;
         case "database.multithreading":
           if (args.getOptionValues(paramName).get(0).equalsIgnoreCase("false")) {
