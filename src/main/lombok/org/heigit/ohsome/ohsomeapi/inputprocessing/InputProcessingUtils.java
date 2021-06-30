@@ -1,6 +1,7 @@
 package org.heigit.ohsome.ohsomeapi.inputprocessing;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -12,6 +13,7 @@ import org.heigit.bigspatialdata.oshdb.api.mapreducer.MapReducer;
 import org.heigit.bigspatialdata.oshdb.api.object.OSHDBMapReducible;
 import org.heigit.bigspatialdata.oshdb.osm.OSMType;
 import org.heigit.bigspatialdata.oshdb.util.OSHDBTag;
+import org.heigit.bigspatialdata.oshdb.util.exceptions.OSHDBKeytablesNotFoundException;
 import org.heigit.bigspatialdata.oshdb.util.tagtranslator.TagTranslator;
 import org.heigit.bigspatialdata.oshdb.util.time.IsoDateTimeParser;
 import org.heigit.bigspatialdata.oshdb.util.time.OSHDBTimestamps;
@@ -354,12 +356,16 @@ public class InputProcessingUtils implements Serializable {
   /**
    * Applies an entity filter using only planar relations (relations with an area) on the given
    * MapReducer object. It uses the tags "type=multipolygon" and "type=boundary".
+   * @throws SQLException 
+   * @throws OSHDBKeytablesNotFoundException 
    */
-  public <T extends OSHDBMapReducible> MapReducer<T> filterOnPlanarRelations(MapReducer<T> mapRed) {
+  public <T extends OSHDBMapReducible> MapReducer<T> filterOnPlanarRelations(MapReducer<T> mapRed)
+      throws OSHDBKeytablesNotFoundException, SQLException {
     // further filtering to not look at all relations
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     OSHDBTag typeMultipolygon = tt.getOSHDBTagOf("type", "multipolygon");
     OSHDBTag typeBoundary = tt.getOSHDBTagOf("type", "boundary");
+    tt.close();
     return mapRed.osmEntityFilter(entity -> !entity.getType().equals(OSMType.RELATION)
         || entity.hasTagValue(typeMultipolygon.getKey(), typeMultipolygon.getValue())
         || entity.hasTagValue(typeBoundary.getKey(), typeBoundary.getValue()));

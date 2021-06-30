@@ -116,7 +116,7 @@ public class UsersRequestExecutor {
     RequestParameters requestParameters = processingData.getRequestParameters();
     String[] groupByValues = inputProcessor.splitParamOnComma(
         inputProcessor.createEmptyArrayIfNull(servletRequest.getParameterValues("groupByValues")));
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     Integer[] valuesInt = new Integer[groupByValues.length];
     ArrayList<Pair<Integer, Integer>> zeroFill = new ArrayList<>();
     int keysInt = tt.getOSHDBTagKeyOf(groupByKey[0]).toInt();
@@ -171,6 +171,7 @@ public class UsersRequestExecutor {
       resultSet[count] = new GroupByResult(groupByName, results);
       count++;
     }
+    tt.close();
     Metadata metadata = null;
     if (processingData.isShowMetadata()) {
       long duration = System.currentTimeMillis() - startTime;
@@ -205,7 +206,7 @@ public class UsersRequestExecutor {
     mapRed = inputProcessor.processParameters();
     ProcessingData processingData = inputProcessor.getProcessingData();
     RequestParameters requestParameters = processingData.getRequestParameters();
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     Integer[] keysInt = new Integer[groupByKeys.length];
     for (int i = 0; i < groupByKeys.length; i++) {
       keysInt[i] = tt.getOSHDBTagKeyOf(groupByKeys[i]).toInt();
@@ -248,6 +249,7 @@ public class UsersRequestExecutor {
       resultSet[count] = new GroupByResult(groupByName, results);
       count++;
     }
+    tt.close();
     Metadata metadata = null;
     if (processingData.isShowMetadata()) {
       long duration = System.currentTimeMillis() - startTime;

@@ -136,7 +136,6 @@ public class Application implements ApplicationRunner {
           hikariConfig.setMaximumPoolSize(numberOfDataExtractionThreads);
           hikariConfig.setKeepaliveTime(120000);
           hikariConfig.setInitializationFailTimeout(-1);
-          DbConnData.keytablesDbPoolConfig = hikariConfig;
           DbConnData.dataSource = new HikariDataSource(hikariConfig);
           break;
         case "database.multithreading":
@@ -180,17 +179,13 @@ public class Application implements ApplicationRunner {
     if (DbConnData.db instanceof OSHDBH2) {
       DbConnData.db = ((OSHDBH2) DbConnData.db).inMemory(caching);
     }
-    if (DbConnData.keytables != null) {
-      DbConnData.tagTranslator = new TagTranslator(DbConnData.keytables.getConnection());
-    } else {
-      if (!(DbConnData.db instanceof OSHDBJdbc)) {
+    if (DbConnData.keytables == null && !(DbConnData.db instanceof OSHDBJdbc)) {
         throw new DatabaseAccessException("Missing keytables.");
-      }
-      DbConnData.tagTranslator = new TagTranslator(((OSHDBJdbc) DbConnData.db).getConnection());
     }
     RequestUtils.extractOSHDBMetadata();
     if (DbConnData.mapTagTranslator == null) {
-      DbConnData.mapTagTranslator = new RemoteTagTranslator(DbConnData.tagTranslator);
+      DbConnData.mapTagTranslator =
+          new RemoteTagTranslator(new TagTranslator(DbConnData.getKeytablesConn()));
     }
     if (DbConnData.db instanceof OSHDBIgnite) {
       RemoteTagTranslator mtt = DbConnData.mapTagTranslator;

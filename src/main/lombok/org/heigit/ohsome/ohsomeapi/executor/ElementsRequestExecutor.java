@@ -109,7 +109,7 @@ public class ElementsRequestExecutor {
     }
     ProcessingData processingData = inputProcessor.getProcessingData();
     RequestParameters requestParameters = processingData.getRequestParameters();
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     String[] keys = requestParameters.getKeys();
     final Set<Integer> keysInt = ExecutionUtils.keysToKeysInt(keys, tt);
     final MapReducer<Feature> preResult;
@@ -176,7 +176,7 @@ public class ElementsRequestExecutor {
     RequestParameters requestParameters = processingData.getRequestParameters();
     String[] groupByValues = inputProcessor.splitParamOnComma(
         inputProcessor.createEmptyArrayIfNull(servletRequest.getParameterValues("groupByValues")));
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     Integer[] valuesInt = new Integer[groupByValues.length];
     ArrayList<Pair<Integer, Integer>> zeroFill = new ArrayList<>();
     int keysInt = tt.getOSHDBTagKeyOf(groupByKey[0]).toInt();
@@ -224,6 +224,7 @@ public class ElementsRequestExecutor {
           new GroupByResult(new Object[] {boundaryIds[boundaryIdentifier], tagIdentifier}, results);
       count++;
     }
+    tt.close();
     // used to remove null objects from the resultSet
     resultSet = Arrays.stream(resultSet).filter(Objects::nonNull).toArray(GroupByResult[]::new);
     Metadata metadata = null;
@@ -283,7 +284,7 @@ public class ElementsRequestExecutor {
     RequestParameters requestParameters = processingData.getRequestParameters();
     String[] groupByValues = inputProcessor.splitParamOnComma(
         inputProcessor.createEmptyArrayIfNull(servletRequest.getParameterValues("groupByValues")));
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     Integer[] valuesInt = new Integer[groupByValues.length];
     ArrayList<Pair<Integer, Integer>> zeroFill = new ArrayList<>();
     int keysInt = tt.getOSHDBTagKeyOf(groupByKey[0]).toInt();
@@ -313,6 +314,7 @@ public class ElementsRequestExecutor {
       resultSet[count] = new GroupByResult(groupByName, results);
       count++;
     }
+    tt.close();
     // used to remove null objects from the resultSet
     resultSet = Arrays.stream(resultSet).filter(Objects::nonNull).toArray(GroupByResult[]::new);
     Metadata metadata = null;
@@ -426,7 +428,7 @@ public class ElementsRequestExecutor {
     mapRed = inputProcessor.processParameters();
     ProcessingData processingData = inputProcessor.getProcessingData();
     RequestParameters requestParameters = processingData.getRequestParameters();
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     Integer[] keysInt = new Integer[groupByKeys.length];
     for (int i = 0; i < groupByKeys.length; i++) {
       keysInt[i] = tt.getOSHDBTagKeyOf(groupByKeys[i]).toInt();
@@ -466,6 +468,7 @@ public class ElementsRequestExecutor {
       resultSet[count] = new GroupByResult(groupByName, results);
       count++;
     }
+    tt.close();
     Metadata metadata = null;
     if (processingData.isShowMetadata()) {
       long duration = System.currentTimeMillis() - startTime;
@@ -514,7 +517,7 @@ public class ElementsRequestExecutor {
     final MapReducer<OSMEntitySnapshot> intermediateMapRed = inputProcessor.processParameters();
     final ProcessingData processingData = inputProcessor.getProcessingData();
     final RequestParameters requestParameters = processingData.getRequestParameters();
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     String[] keys2 = inputProcessor.splitParamOnComma(
         inputProcessor.createEmptyArrayIfNull(servletRequest.getParameterValues("keys2")));
     String[] values2 = inputProcessor.splitParamOnComma(
@@ -541,6 +544,7 @@ public class ElementsRequestExecutor {
         valuesInt2[i] = tt.getOSHDBTagOf(keys2[i], values2[i]).getValue();
       }
     }
+    tt.close();
     EnumSet<OSMType> osmTypes1 =
         (EnumSet<OSMType>) inputProcessor.getProcessingData().getOsmTypes();
     String[] types1 = inputProcessor.splitParamOnComma(
@@ -665,7 +669,8 @@ public class ElementsRequestExecutor {
     String filter2 = inputProcessor.createEmptyStringIfNull(servletRequest.getParameter("filter2"));
     inputProcessor.checkFilter(filter2);
     String combinedFilter = ExecutionUtils.combineFiltersWithOr(filter1, filter2);
-    FilterParser fp = new FilterParser(DbConnData.tagTranslator);
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
+    FilterParser fp = new FilterParser(tt);
     FilterExpression filterExpr1 = inputProcessor.getUtils().parseFilter(fp, filter1);
     FilterExpression filterExpr2 = inputProcessor.getUtils().parseFilter(fp, filter2);
     RequestParameters requestParamsCombined = new RequestParameters(servletRequest.getMethod(),
@@ -777,7 +782,7 @@ public class ElementsRequestExecutor {
     Integer[] valuesInt1 = new Integer[requestParameters.getValues().length];
     Integer[] keysInt2 = new Integer[keys2.length];
     Integer[] valuesInt2 = new Integer[values2.length];
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     for (int i = 0; i < requestParameters.getKeys().length; i++) {
       keysInt1[i] = tt.getOSHDBTagKeyOf(requestParameters.getKeys()[i]).toInt();
       if (requestParameters.getValues() != null && i < requestParameters.getValues().length) {
@@ -792,6 +797,7 @@ public class ElementsRequestExecutor {
         valuesInt2[i] = tt.getOSHDBTagOf(keys2[i], values2[i]).getValue();
       }
     }
+    tt.close();
     EnumSet<OSMType> osmTypes1 = (EnumSet<OSMType>) processingData.getOsmTypes();
     String[] types1 = inputProcessor.splitParamOnComma(
         inputProcessor.createEmptyArrayIfNull(servletRequest.getParameterValues("types")));
@@ -966,7 +972,8 @@ public class ElementsRequestExecutor {
         inputProcessor.createEmptyStringIfNull(servletRequest.getParameter("filter2"));
     inputProcessor.checkFilter(filter2);
     final String combinedFilter = ExecutionUtils.combineFiltersWithOr(filter1, filter2);
-    final FilterParser fp = new FilterParser(DbConnData.tagTranslator);
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
+    final FilterParser fp = new FilterParser(tt);
     final FilterExpression filterExpr1 = inputProcessor.getUtils().parseFilter(fp, filter1);
     final FilterExpression filterExpr2 = inputProcessor.getUtils().parseFilter(fp, filter2);
     RequestParameters requestParamsCombined = new RequestParameters(servletRequest.getMethod(),

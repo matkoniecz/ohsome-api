@@ -2,6 +2,7 @@ package org.heigit.ohsome.ohsomeapi.inputprocessing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +28,9 @@ import org.heigit.bigspatialdata.oshdb.api.object.OSHDBMapReducible;
 import org.heigit.bigspatialdata.oshdb.api.object.OSMContribution;
 import org.heigit.bigspatialdata.oshdb.api.object.OSMEntitySnapshot;
 import org.heigit.bigspatialdata.oshdb.osm.OSMType;
+import org.heigit.bigspatialdata.oshdb.util.exceptions.OSHDBKeytablesNotFoundException;
 import org.heigit.bigspatialdata.oshdb.util.geometry.OSHDBGeometryBuilder;
+import org.heigit.bigspatialdata.oshdb.util.tagtranslator.TagTranslator;
 import org.heigit.bigspatialdata.oshdb.util.time.IsoDateTimeParser;
 import org.heigit.bigspatialdata.oshdb.util.time.OSHDBTimestamps;
 import org.heigit.ohsome.filter.FilterExpression;
@@ -249,7 +252,8 @@ public class InputProcessor {
         throw new BadRequestException(ExceptionMessages.FILTER_PARAM);
       } else {
         // call translator and add filters to mapRed
-        FilterParser fp = new FilterParser(DbConnData.tagTranslator);
+        var tt = new TagTranslator(DbConnData.getKeytablesConn());
+        FilterParser fp = new FilterParser(tt);
         FilterExpression filterExpr = utils.parseFilter(fp, filter);
         processingData.setFilterExpression(filterExpr);
         if (!(processingData.isRatio()
@@ -271,9 +275,11 @@ public class InputProcessor {
    * @param types <code>String</code> array containing one, two, or all 3 OSM types (node, way,
    *        relation), or simple feature types (point, line, polygon, other). If the array is empty,
    *        all three OSM types are used.
+   * @throws SQLException 
+   * @throws OSHDBKeytablesNotFoundException 
    */
   public <T extends OSHDBMapReducible> MapReducer<T> defineTypes(String[] types,
-      MapReducer<T> mapRed) {
+      MapReducer<T> mapRed) throws OSHDBKeytablesNotFoundException, SQLException {
     types = createEmptyArrayIfNull(types);
     checkTypes(types);
     processingData.setOsmTypes(EnumSet.noneOf(OSMType.class));

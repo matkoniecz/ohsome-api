@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Streams;
 import com.opencsv.CSVWriter;
-import com.zaxxer.hikari.HikariDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -854,20 +853,13 @@ public class ExecutionUtils implements Serializable {
       final ServletOutputStream outputStream)
       throws ExecutionException, InterruptedException, IOException {
     ThreadLocal<TagTranslator> tts;
-    HikariDataSource keytablesConnectionPool;
-    if (DbConnData.keytablesDbPoolConfig != null) {
-      keytablesConnectionPool = new HikariDataSource(DbConnData.keytablesDbPoolConfig);
-      tts = ThreadLocal.withInitial(() -> {
+    tts = ThreadLocal.withInitial(() -> {
         try {
-          return new TagTranslator(keytablesConnectionPool.getConnection());
+          return new TagTranslator(DbConnData.getKeytablesConn());
         } catch (OSHDBKeytablesNotFoundException | SQLException e) {
           throw new DatabaseAccessException(ExceptionMessages.DATABASE_ACCESS);
         }
       });
-    } else {
-      keytablesConnectionPool = null;
-      tts = ThreadLocal.withInitial(() -> DbConnData.tagTranslator);
-    }
     ReentrantLock lock = new ReentrantLock();
     AtomicBoolean errored = new AtomicBoolean(false);
     ForkJoinPool threadPool = new ForkJoinPool(ProcessingData.getNumberOfDataExtractionThreads());
@@ -919,9 +911,6 @@ public class ExecutionUtils implements Serializable {
       })).get();
     } finally {
       threadPool.shutdown();
-      if (keytablesConnectionPool != null) {
-        keytablesConnectionPool.close();
-      }
       outputStream.flush();
     }
   }

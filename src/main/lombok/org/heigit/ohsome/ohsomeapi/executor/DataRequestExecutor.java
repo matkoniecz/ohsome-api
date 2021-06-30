@@ -81,7 +81,7 @@ public class DataRequestExecutor extends RequestExecutor {
     if (time.length != 2) {
       throw new BadRequestException(ExceptionMessages.TIME_FORMAT_FULL_HISTORY);
     }
-    TagTranslator tt = DbConnData.tagTranslator;
+    var tt = new TagTranslator(DbConnData.getKeytablesConn());
     String[] keys = requestParameters.getKeys();
     final Set<Integer> keysInt = ExecutionUtils.keysToKeysInt(keys, tt);
     final ExecutionUtils exeUtils = new ExecutionUtils(processingData);
