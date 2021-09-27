@@ -29,9 +29,9 @@ The following blog posts describe analyses which were using the ohsome API:
 * [Farm shops are ohsome](https://heigit.org/farm-shops-are-ohsome/)
 * [Visualizing the historical OSM evolution of your city](https://heigit.org/how-to-become-ohsome-part-1-visualizing-the-historical-evolution-of-osm-buildings-of-your-city/) 
 * [Exploring OSM history: the example of health related amenities](https://heigit.org/exploring-osm-history-the-example-of-health-related-amenities/)
-* several posts of the [how to become ohsome](https://heigit.org/tag/become-ohsome/) series
+* several posts of the [how to become ohsome](https://heigit.aaaorg/tag/become-ohsome/) series
 
-Here you see an example response giving the length of residential roads for a bounding box around the german city Heidelberg.
+Here you see an example response giving the length of residential roads for a bounding box around the German city Heidelberg.
 
 ```json
 {
